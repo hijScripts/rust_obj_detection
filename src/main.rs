@@ -1,11 +1,19 @@
-use nokhwa::{
-    Camera,
-    pixel_format::RgbFormat,
-    utils::{CameraIndex, RequestedFormat, RequestedFormatType, CameraFormat, FrameFormat},
-};
-
+use anyhow::Result;
+use image::{ImageBuffer, RgbImage};
 use minifb::{Key, Window, WindowOptions};
+use ndarray::{Array4, Axis};
+use nokhwa::{
+    pixel_format::RgbFormat, utils::{CameraFormat, CameraIndex, FrameFormat, RequestedFormat, RequestedFormatType},
+    Camera,
+};
+use ort::{environment::Environment, session::Session, Value};
 use std::time::Duration;
+
+// 
+const IN_W: u32 = 640;
+const IN_H: u32 = 640;
+const CONF_THRES: f32 = 0.25;
+const IOU_THRES: f32 = 0.45;
 
 fn main() {
 
@@ -30,7 +38,7 @@ fn main() {
     let (width, height) = (decoded.width(), decoded.height());
 
     let mut window = Window::new(
-        "AKAZE Live (Esc quits)",
+        "Yolo11n Live (Esc quits)",
         width as usize,
         height as usize,
         WindowOptions {
