@@ -15,12 +15,17 @@ use nokhwa::{
 use minifb::{Key, Window, WindowOptions};
 use std::time::Duration;
 
+struct CameraSettings {
+    index: CameraIndex,
+    format: RequestedFormat,
+}
+
 fn main() {
 
     // On macOS, request camera permission at runtime
     #[cfg(target_os = "macos")]
     nokhwa::nokhwa_initialize(|granted| assert!(granted, "camera permission denied"));
-
+    
     // Selecting an external camera
     let index = CameraIndex::Index(1);
 
