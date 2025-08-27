@@ -15,25 +15,17 @@ use nokhwa::{
 use minifb::{Key, Window, WindowOptions};
 use std::time::Duration;
 
-struct CameraSettings {
-    index: CameraIndex,
-    format: RequestedFormat,
-}
-
 fn main() {
 
     // On macOS, request camera permission at runtime
     #[cfg(target_os = "macos")]
     nokhwa::nokhwa_initialize(|granted| assert!(granted, "camera permission denied"));
-    
-    // Selecting an external camera
-    let index = CameraIndex::Index(1);
 
-    // Setting desired format
+    let camera_index = CameraIndex::Index(1);
     let camera_format = CameraFormat::new_from(640, 480, FrameFormat::MJPEG, 30);
-    let requested = RequestedFormat::new::<RgbFormat>(RequestedFormatType::Exact(camera_format));
+    let req_format = RequestedFormat::new::<RgbFormat>(RequestedFormatType::Exact(camera_format));
 
-    let mut camera = Camera::new(index, requested).expect("camera");
+    let mut camera = Camera::new(camera_index, req_format).expect("camera");
 
     camera.open_stream().expect("open stream");
 
