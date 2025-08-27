@@ -16,15 +16,20 @@ use minifb::{Key, Window, WindowOptions};
 use std::time::Duration;
 
 fn main() {
+
+    // On macOS, request camera permission at runtime
     #[cfg(target_os = "macos")]
     nokhwa::nokhwa_initialize(|granted| assert!(granted, "camera permission denied"));
 
+    // Selecting an external camera
     let index = CameraIndex::Index(1);
+
+    // Setting desired format
     let camera_format = CameraFormat::new_from(640, 480, FrameFormat::MJPEG, 30);
     let requested = RequestedFormat::new::<RgbFormat>(RequestedFormatType::Exact(camera_format));
+
     let mut camera = Camera::new(index, requested).expect("camera");
 
-    // If your nokhwa version requires it, uncomment the next line:
     camera.open_stream().expect("open stream");
 
     // Prime one frame to size things
@@ -48,7 +53,8 @@ fn main() {
     let mut argb_buf: Vec<u32> = vec![0; (width * height) as usize];
 
     while window.is_open() && !window.is_key_down(Key::Escape) {
-        // Grab latest frame
+
+        // Grab a frame
         let decoded = match camera.frame().and_then(|f| f.decode_image::<RgbFormat>()) {
             Ok(img) => img,
             Err(_) => continue, // skip a dropped frame
