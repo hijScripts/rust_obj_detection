@@ -1,10 +1,10 @@
-// use cv::{
-//     feature::akaze::{Akaze, KeyPoint},
-//     image::{
-//         image::{self, DynamicImage, Rgba},
-//         imageproc::drawing,
-//     },
-// };
+use cv::{
+    feature::akaze::{Akaze, KeyPoint},
+    image::{
+        image::{self, DynamicImage, Rgba},
+        imageproc::drawing,
+    },
+};
 
 use nokhwa::{
     Camera,
