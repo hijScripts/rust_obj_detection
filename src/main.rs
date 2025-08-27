@@ -22,7 +22,7 @@ fn main() {
     nokhwa::nokhwa_initialize(|granted| assert!(granted, "camera permission denied"));
 
     // Selecting camera
-    let index = CameraIndex::Index(0);
+    let index = CameraIndex::Index(1);
 
     // Selecting desired format
     let camera_format = CameraFormat::new_from(640, 480, FrameFormat::MJPEG, 30);
