@@ -21,22 +21,17 @@ fn main() {
     #[cfg(target_os = "macos")]
     nokhwa::nokhwa_initialize(|granted| assert!(granted, "camera permission denied"));
 
-    // Selecting camera
+    // -- Setting up Camera -- //
     let index = CameraIndex::Index(1);
-
-    // Selecting desired format
     let camera_format = CameraFormat::new_from(640, 480, FrameFormat::MJPEG, 30);
     let requested = RequestedFormat::new::<RgbFormat>(RequestedFormatType::Exact(camera_format));
-
-    // Creating instance of the camera
     let mut camera = Camera::new(index, requested).expect("camera");
 
     camera.open_stream().expect("open stream");
 
-    // Prime one frame to size things
+    // -- Setting up Window -- //
     let decoded = camera.frame().expect("frame").decode_image::<RgbFormat>().expect("decode");
     let (width, height) = (decoded.width(), decoded.height());
-
     let mut window = Window::new(
         "Yolo11n Live (Esc quits)",
         width as usize,
@@ -47,10 +42,7 @@ fn main() {
             ..WindowOptions::default()
         },
     ).expect("window");
-
     window.limit_update_rate(Some(Duration::from_micros(16_666))); // ~60 FPS
-
-    // Reusable ARGB buffer for minifb: 0x00RRGGBB per pixel
     let mut argb_buf: Vec<u32> = vec![0; (width * height) as usize];
 
     while window.is_open() && !window.is_key_down(Key::Escape) {
