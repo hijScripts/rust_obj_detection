@@ -6,4 +6,4 @@ edition = "2024"
 [dependencies]
 cv = {version = "0.6.0", path = "cv/cv"}
 minifb = "0.28.0"
-nokhwa = "0.10.9"
+nokhwa = {version = "0.10.9", features = ["input-native"]}
