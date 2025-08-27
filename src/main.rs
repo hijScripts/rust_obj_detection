@@ -1,10 +1,10 @@
-use cv::{
-    feature::akaze::{Akaze, KeyPoint},
-    image::{
-        image::{self, DynamicImage, Rgba},
-        imageproc::drawing,
-    },
-};
+// use cv::{
+//     feature::akaze::{Akaze, KeyPoint},
+//     image::{
+//         image::{self, DynamicImage, Rgba},
+//         imageproc::drawing,
+//     },
+// };
 
 use nokhwa::{
     Camera,
@@ -21,11 +21,15 @@ fn main() {
     #[cfg(target_os = "macos")]
     nokhwa::nokhwa_initialize(|granted| assert!(granted, "camera permission denied"));
 
-    let camera_index = CameraIndex::Index(1);
-    let camera_format = CameraFormat::new_from(640, 480, FrameFormat::MJPEG, 30);
-    let req_format = RequestedFormat::new::<RgbFormat>(RequestedFormatType::Exact(camera_format));
+    // Selecting camera
+    let index = CameraIndex::Index(0);
 
-    let mut camera = Camera::new(camera_index, req_format).expect("camera");
+    // Selecting desired format
+    let camera_format = CameraFormat::new_from(640, 480, FrameFormat::MJPEG, 30);
+    let requested = RequestedFormat::new::<RgbFormat>(RequestedFormatType::Exact(camera_format));
+
+    // Creating instance of the camera
+    let mut camera = Camera::new(index, requested).expect("camera");
 
     camera.open_stream().expect("open stream");
 
